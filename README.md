@@ -2,9 +2,15 @@
 
 ## repeated setup
 
+`mkdir <project>`
+
 `cd` into project root directory
 
 run `yo jasmine`
+
+`mkdir src`
+
+make source file in `src/`
 
 run `yo karma --test-framework=jasmine`
 
