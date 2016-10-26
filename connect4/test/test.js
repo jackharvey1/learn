@@ -37,22 +37,58 @@ describe('Connect 4', function() {
             var colours = getColours();
             expect(colours.sort()).toEqual(['R', 'Y']);
         });
-        //diagonal right win]
-        //diagonal left win
-        //vertical win
-        //horizontal win
-        //no win
 
-        it('returns red for vertical', function() {
+        it('returns true for vertical', function() {
             insert(0, 'R');
             insert(0, 'R');
             insert(0, 'R');
             insert(0, 'R');
-            expect(hasWon()).toBe('R');
+            expect(hasStraight('R')).toBe(true);
         });
 
-        // for(var i = 0; i < 4; i++) {
-        //     insert(0, 'R');
-        // }
+        it('returns true for horizontal', function() {
+            insert(0, 'R');
+            insert(1, 'R');
+            insert(2, 'R');
+            insert(3, 'R');
+            expect(hasStraight('R')).toBe(true);
+        });
+
+        it('doesn\'t think several spaced tokens mean a win', function() {
+            insert(0, 'R');
+            insert(0, 'R');
+            insert(0, 'R');
+            insert(0, 'Y');
+            insert(0, 'R');
+            expect(hasStraight('R')).toBe(false);
+        });
+
+        it('returns a right diagonal', function() {
+            insert(0, 'R');
+            insert(0, 'R');
+            insert(0, 'R');
+            insert(0, 'R');
+            insert(1, 'R');
+            insert(1, 'R');
+            insert(1, 'R');
+            insert(2, 'R');
+            insert(2, 'R');
+            insert(3, 'R');
+            expect(hasDiagonal('R')).toBe(true);
+        });
+
+        it('returns a left diagonal', function() {
+            insert(0, 'R');
+            insert(1, 'R');
+            insert(1, 'R');
+            insert(2, 'R');
+            insert(2, 'R');
+            insert(2, 'R');
+            insert(3, 'R');
+            insert(3, 'R');
+            insert(3, 'R');
+            insert(3, 'R');
+            expect(hasDiagonal('R')).toBe(true);
+        });
     });
 });

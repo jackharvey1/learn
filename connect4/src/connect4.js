@@ -6,13 +6,13 @@
 //7 columns 6 rows
 
 var board = [];
-
-
-
-
+var rows = 0;
+var cols = 0;
 
 function hasWon() {
+    for (var colour in getColours()) {
 
+    }
 }
 
 function getSubarray(startX, startY) {
@@ -22,37 +22,63 @@ function getSubarray(startX, startY) {
     }
 }
 
-function hasVertical() {
-    var vertical = 'X\nX\nX\nX';
-    for (var i = 0; i < board.length; i++) {
-        var columnFlag = false;
-        for(var j = 0; j < board[0].length - 4; j++) {
-            var column = [
-                board[i][j],
-                board[i][j+1],
-                board[i][j+2],
-                board[i][j+3]
-            ];
-            if (column === vertical) {
+function hasStraight(colour) {
+    for (var i = 0; i < cols; i++) {
+        var horizontalCounter = 0;
+        var verticalCounter = 0;
+        for(var j = 0; j < rows; j++) {
+            if (board[i][j] === colour) {
+                verticalCounter++;
+            } else {
+                verticalCounter = 0;
+            }
 
+            if (board[j][i] === colour) {
+                horizontalCounter++;
+            } else {
+                horizontalCounter = 0;
+            }
+
+            if (verticalCounter >= 4 || horizontalCounter >= 4) {
+                return true;
             }
         }
     }
+    return false;
 }
 
-function hasHorizontal() {
-    var horizontal = 'XXXX';
-}
+function hasDiagonal(colour) {
+    var leftCounter = 0;
+    var rightCounter = 0;
+    for (var col = 0; col < cols - 3; col++) {
+        for (var row = 0; row < rows - 3; row++) {
+            for (var step = 0; step < 4; step++) {
+                if (board[cols-col-step-1][row+step] === colour) {
+                    leftCounter++;
+                } else {
+                    leftCounter = 0;
+                }
 
-function hasDiagonal() {
-    var diagonalRight = 'XOOO\nOXOO\nOOXO\nOOOX';
-    var diagonalLeft = 'OOOX\nOOXO\nOXOO\nXOOO';
+                if (board[col+step][row+step] === colour) {
+                    rightCounter++;
+                } else {
+                    rightCounter = 0;
+                }
+
+                if (leftCounter >= 4 || rightCounter >= 4) {
+                    return true;
+                }
+            }
+        }
+
+    }
+    return false;
 }
 
 function getColours() {
     var colours = [];
-    for (var i = 0; i < board.length; i++) {
-        for(var j = 0; j < board[0].length; j++) {
+    for (var i = 0; i < cols; i++) {
+        for(var j = 0; j < rows; j++) {
             if (colours.indexOf(board[i][j]) === -1 && board[i][j] !== 'O') {
                 colours.push(board[i][j]);
             }
@@ -62,7 +88,7 @@ function getColours() {
 }
 
 function insert(column, colour) {
-    if (column > board.length) {
+    if (column > cols) {
         return;
     } else {
         for (var i = 0; i < board[column].length; i++) {
@@ -77,30 +103,30 @@ function insert(column, colour) {
     }
 }
 
-function instantiateBoard(columns, rows) {
-    for (var i = 0; i < columns; i++) {
+function instantiateBoard(numCols, numRows) {
+    cols = numCols;
+    rows = numRows;
+    for (var i = 0; i < numCols; i++) {
         board[i] = [];
-        for(var j = 0; j < rows; j++) {
+        for(var j = 0; j < numRows; j++) {
             board[i][j] = 'O';
         }
     }
 }
 
 function resetBoard() {
-    for (var i = 0; i < board.length; i++) {
-        for(var j = 0; j < board[0].length; j++) {
+    for (var i = 0; i < cols; i++) {
+        for(var j = 0; j < rows; j++) {
             board[i][j] = 'O';
         }
     }
 }
 
 function printBoard() {
-    for (var row = 0; row < board[0].length; row++) {
+    for (var row = 0; row < rows; row++) {
         var rowString = "";
-        for (var col = 0; col < board.length; col++) {
+        for (var col = 0; col < cols; col++) {
             rowString += board[col][row];
         }
-        console.log(rowString);
     }
-    console.log('-------');
 }
