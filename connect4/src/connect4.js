@@ -3,43 +3,72 @@
     "use strict";
 })();
 
-//7 columns 6 rows
+var $ = require('jquery');
 
+//7 columns 6 rows
 var board = [];
+var tokenColour = 'R';
 var rows = 0;
 var cols = 0;
+var gameOver = false;
+
+window.onload = function() {
+    instantiateBoard(7,6);
+    var table = $('#connect4');
+    for(var row = 0; row < rows; row++) {
+        table.append('<tr id="row-' + row + '">');
+        var rowElement = $('#row-' + row);
+        for(var col = 0; col < cols; col++) {
+            rowElement.append('<td id="cell-' + col + '-' + row + '" onclick="addToken(' + col + ')"></td>"');
+        }
+        table.append('</tr>');
+    }
+};
 
 function hasWon() {
-    for (var colour in getColours()) {
-
+    var colours = getColours();
+    for(var c = 0; c < colours.length; c++) {
+        if (hasDiagonal(colours[c]) || hasStraight(colours[c])) {
+            gameOver = true;
+            return colours[c];
+        }
     }
-}
-
-function getSubarray(startX, startY) {
-    if (startX )
-    for (var x = startX; i < startX + 4; i++) {
-
-    }
+    return false;
 }
 
 function hasStraight(colour) {
+    return (hasHorizontal(colour) || hasVertical(colour));
+}
+
+function hasVertical(colour) {
     for (var i = 0; i < cols; i++) {
-        var horizontalCounter = 0;
-        var verticalCounter = 0;
+        var counter = 0;
         for(var j = 0; j < rows; j++) {
             if (board[i][j] === colour) {
-                verticalCounter++;
+                counter++;
             } else {
-                verticalCounter = 0;
+                counter = 0;
             }
 
+            if (counter >= 4) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+function hasHorizontal(colour) {
+    for (var i = 0; i < rows; i++) {
+        var counter = 0;
+        for (var j = 0; j < cols; j++) {
             if (board[j][i] === colour) {
-                horizontalCounter++;
+                counter++;
             } else {
-                horizontalCounter = 0;
+                counter = 0;
             }
 
-            if (verticalCounter >= 4 || horizontalCounter >= 4) {
+            if (counter >= 4) {
                 return true;
             }
         }
@@ -50,9 +79,9 @@ function hasStraight(colour) {
 function hasDiagonal(colour) {
     var leftCounter = 0;
     var rightCounter = 0;
-    for (var col = 0; col < cols - 3; col++) {
-        for (var row = 0; row < rows - 3; row++) {
-            for (var step = 0; step < 4; step++) {
+    for(var col = 0; col < cols - 3; col++) {
+        for(var row = 0; row < rows - 3; row++) {
+            for(var step = 0; step < 4; step++) {
                 if (board[cols-col-step-1][row+step] === colour) {
                     leftCounter++;
                 } else {
@@ -65,7 +94,11 @@ function hasDiagonal(colour) {
                     rightCounter = 0;
                 }
 
-                if (leftCounter >= 4 || rightCounter >= 4) {
+                if (leftCounter >= 4) {
+                    console.log('diagonally left from column ', col, ' and row ', row);
+                    return true;
+                } else if (rightCounter >= 4) {
+                    console.log('diagonally right from column ', col, ' and row ', row);
                     return true;
                 }
             }
@@ -76,37 +109,48 @@ function hasDiagonal(colour) {
 }
 
 function getColours() {
-    var colours = [];
-    for (var i = 0; i < cols; i++) {
-        for(var j = 0; j < rows; j++) {
-            if (colours.indexOf(board[i][j]) === -1 && board[i][j] !== 'O') {
-                colours.push(board[i][j]);
-            }
-        }
-    }
-    return colours;
+    return ['R', 'Y'];
 }
 
 function insert(column, colour) {
-    if (column > cols) {
-        return;
-    } else {
-        for (var i = 0; i < board[column].length; i++) {
-            if (board[column][i] === 'R' || board[column][i] === 'Y') {
-                board[column][i - 1] = colour;
-                return;
-            } else if (i === board[column].length - 1) {
-                board[column][i] = colour;
-                return;
-            }
+    for(var i = 0; i < rows; i++) {
+        if (board[column][i + 1] === 'R' || board[column][i + 1] === 'Y' || i === rows - 1) {
+            board[column][i] = colour;
+            $('#cell-' + column + '-' + i).addClass(colour);
+            break;
         }
+    }
+
+    if (hasWon() === 'R') {
+        $('body').append('<p>Red wins!</p>');
+    } else if (hasWon() === 'Y') {
+        $('body').append('<p>Yellow wins!</p>');
+    }
+}
+
+function addToken(column) {
+    if (column > cols || board[column][0] !== 'O') {
+        return;
+    }
+
+    if (!gameOver) {
+        insert(column, tokenColour);
+        swapTokenColour();
+    }
+}
+
+function swapTokenColour() {
+    if (tokenColour === 'R') {
+        tokenColour = 'Y';
+    } else {
+        tokenColour = 'R';
     }
 }
 
 function instantiateBoard(numCols, numRows) {
     cols = numCols;
     rows = numRows;
-    for (var i = 0; i < numCols; i++) {
+    for(var i = 0; i < numCols; i++) {
         board[i] = [];
         for(var j = 0; j < numRows; j++) {
             board[i][j] = 'O';
@@ -115,17 +159,20 @@ function instantiateBoard(numCols, numRows) {
 }
 
 function resetBoard() {
-    for (var i = 0; i < cols; i++) {
+    gameOver = false;
+    for(var i = 0; i < cols; i++) {
         for(var j = 0; j < rows; j++) {
             board[i][j] = 'O';
+            $('#cell-' + i + '-' + j).removeClass('R Y');
         }
     }
+    tokenColour = 'R';
 }
 
 function printBoard() {
-    for (var row = 0; row < rows; row++) {
+    for(var row = 0; row < rows; row++) {
         var rowString = "";
-        for (var col = 0; col < cols; col++) {
+        for(var col = 0; col < cols; col++) {
             rowString += board[col][row];
         }
     }

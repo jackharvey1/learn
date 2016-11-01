@@ -19,6 +19,7 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
+        '../node_modules/jquery/src/jquery.js',
         'test.js',
         '../src/connect4.js'
     ],
