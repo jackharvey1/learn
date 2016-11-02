@@ -70,6 +70,10 @@ describe('Fizz buzz', function() {
                     multiple: 3, result: 'boom' }
             ]);
         });
+        it('works with a normal number', function() {
+            addRule(4, 'gurgle');
+            expect(customFizz(9)).toEqual(9);
+        })
         it('works with one rule', function() {
             addRule(5, 'crackle');
             expect(customFizz(5)).toBe('crackle');

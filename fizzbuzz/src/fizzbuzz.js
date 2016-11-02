@@ -10,17 +10,13 @@ function addRule(multiple, result) {
 }
 
 function customFizz(number) {
-    if (rules.length > 0) {
-        var results = [];
-        for (var r = 0; r < rules.length; r++) {
-            if (number % rules[r].multiple === 0) {
-                results.push(rules[r].result);
-            }
+    var results = [];
+    for (var r = 0; r < rules.length; r++) {
+        if (number % rules[r].multiple === 0) {
+            results.push(rules[r].result);
         }
-        return results.join(' ');
-    } else {
-        return number;
     }
+    return results.length > 0 ? results.join(' ') : number;
 }
 
 function fizzbuzz(number) {
