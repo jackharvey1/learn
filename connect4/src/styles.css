@@ -1,0 +1,44 @@
+td {
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+}
+
+.container {
+    margin: auto;
+}
+
+.connect4 {
+    width: 420px;
+    height: 360px;
+    text-align: center;
+}
+
+.score {
+    display: inline-block;
+    left: 50%;
+    height: 100px;
+    position: relative;
+    transform: translateX(-100%);
+}
+
+.redScore {
+    background-color: red;
+    float: left;
+    width: 100%;
+}
+
+.yellowScore {
+    background-color: yellow;
+    float: left;
+    width: 100%;
+}
+
+
+.R {
+    background-color: red;
+}
+
+.Y {
+    background-color: yellow;
+}

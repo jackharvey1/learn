@@ -1,0 +1,22 @@
+{
+  "name": "connect4",
+  "description": "",
+  "main": "",
+  "authors": [
+    "Jack Harvey <jack.harvey@news.co.uk>"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jasmine-core": "jasmine#^2.5.2",
+    "jasmine-jquery": "karma-jasmine-jquery^2.1.1"
+  }
+}
