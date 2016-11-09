@@ -1,0 +1,81 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <style>
+            body {
+                padding-top: 25px;
+                background-color: #EEE;
+            }
+            div {
+                height: 25px;
+                width: 350px;
+                margin: auto;
+            }
+            .block {
+                float: left;
+                border-style: solid;
+                border-color: white;
+                border-width: 1px;
+            }
+            .quarter {
+                width: 24.4%;
+            }
+            .fives {
+                width: 8.52%;
+            }
+            .O {
+                background-color: black;
+            }
+            .Y {
+                background-color: yellow;
+            }
+            .R {
+                background-color: red;
+            }
+        </style>
+        <script src="berlin.js"></script>
+    </head>
+
+    <body onload="updateHTML(); setInterval(updateHTML, 1000)">
+        <div>
+            <div class="row">
+                <div id="0" colspan="11" class="block "></div>
+            </div>
+
+            <div class="row">
+                <div id="1" class="quarter block "></div>
+                <div id="2" class="quarter block "></div>
+                <div id="3" class="quarter block "></div>
+                <div id="4" class="quarter block "></div>
+            </div>
+
+            <div class="row">
+                <div id="5" class="quarter block "></div>
+                <div id="6" class="quarter block "></div>
+                <div id="7" class="quarter block "></div>
+                <div id="8" class="quarter block "></div>
+            </div>
+
+            <div class="row">
+                <div id="9" class="fives block "></div>
+                <div id="10" class="fives block "></div>
+                <div id="11" class="fives block "></div>
+                <div id="12" class="fives block "></div>
+                <div id="13" class="fives block "></div>
+                <div id="14" class="fives block "></div>
+                <div id="15" class="fives block "></div>
+                <div id="16" class="fives block "></div>
+                <div id="17" class="fives block "></div>
+                <div id="18" class="fives block "></div>
+                <div id="19" class="fives block "></div>
+            </div>
+
+            <div class="row">
+                <div id="20" class="quarter block "></div>
+                <div id="21" class="quarter block "></div>
+                <div id="22" class="quarter block "></div>
+                <div id="23" class="quarter block "></div>
+            </div>
+        </div>
+    </body>
+</html>
