@@ -79,9 +79,9 @@ describe('Snakes and ladders', function() {
         });
         it('should reroll when players roll the same', function() {
             players = [
-                [0,1],
-                [1,1],
-                [2,1]
+                [0, 1],
+                [1, 1],
+                [2, 1]
             ];
             checkForDuplicates(3);
             expect(players).not.toEqual(
@@ -117,6 +117,24 @@ describe('Snakes and ladders', function() {
             expect(player).toEqual(2);
             nextPlayer();
             expect(player).toEqual(1);
+        });
+    });
+    describe('against a computer player', function() {
+        it('should add some computer players', function() {
+            players = [];
+            addPlayers(1, 1);
+            expect(players).toEqual([
+                [0, 1, true]
+            ]);
+        });
+        it('should add some human and computer players', function() {
+            players = [];
+            addPlayers(3,1);
+            expect(players).toEqual([
+                [0, 1, true],
+                [1, 1, false],
+                [2, 1, false]
+            ]);
         });
     });
     describe('lookup array', function() {

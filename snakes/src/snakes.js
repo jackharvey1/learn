@@ -1,3 +1,4 @@
+/* jshint esversion:6 */
 (function() {
     'use strict';
 })();
@@ -5,16 +6,97 @@
 var players = [];
 var player;
 var directory = {};
-var snakes = [[12,2]];
+var snakes = [[24,2]];
 var ladders = [[2,12]];
 
-function initialise(numPlayers) {
-    for (p = 0; p < numPlayers; p++) {
-        players.push([p, 1]);
+function createBoard() {
+    //Create board
+    var body = document.getElementsByTagName("body")[0];
+    var board = document.createElement("table");
+    var row;
+    var cell;
+
+    body.appendChild(board);
+    for (var i = 0; i < 10; i++) {
+        row = document.createElement("tr");
+        row.id = 'row-' + (i + 1);
+        board.appendChild(row);
+        for (var j = 0; j < 10; j++) {
+            cell = document.createElement("td");
+            row.appendChild(cell);
+            cell.id = 'cell-' + (i+1) + '-' + (j + 1);
+        }
     }
+
+    var width = cell.offsetWidth;
+    var height = cell.offsetHeight;
+
+    //Create ladders
+
+    for (var s = 0; s < snakes.length; s++) {
+        var start = snakes[s][0];
+        var end = snakes[s][1];
+
+        var triangleWidth = (end - start) % 10;
+        var triangleHeight = Math.floor((end - start)/10);
+        var triangleHypotenuse = Math.sqrt(
+            Math.pow(triangleWidth, 2) +
+            Math.pow(triangleHeight, 2)
+        );
+
+        var holder = document.createElement("div");
+        var circle1 = document.createElement("div");
+        var circle2 = document.createElement("div");
+
+        board.appendChild(holder);
+        holder.appendChild(circle1);
+        holder.appendChild(circle2);
+
+        holder.className = "holder";
+        circle1.className = "circle";
+        circle2.className = "circle circle2";
+
+        holder.style.transform = `rotate(${
+            90 - toDegrees(Math.asin(triangleWidth / triangleHypotenuse))
+        }deg)`;
+        holder.style.width = `${triangleHypotenuse * width}px`;
+        console.log();
+        holder.style.top = `${(10 - Math.floor(end / 10)) * width}px`;
+    }
+}
+
+function toDegrees (angle) {
+  return angle * (180 / Math.PI);
+}
+
+function toRadians (angle) {
+  return angle * (Math.PI / 180);
+}
+
+function initialise(numPlayers, numComputers) {
+    addPlayers(numPlayers, numComputers);
     createLookup(numPlayers);
     initialRoll(numPlayers);
+    checkForDuplicates();
     sortPlayers();
+}
+
+function reset() {
+    var players = [];
+    var player;
+    var directory = {};
+    var snakes = [[12,2]];
+    var ladders = [[2,12]];
+}
+
+function addPlayers(numPlayers, numComputers) {
+    for (p = 0; p < numPlayers; p++) {
+        if (p >= numComputers) {
+            players.push([p, 1, false]);
+        } else {
+            players.push([p, 1, true]);
+        }
+    }
 }
 
 function runGame() {
@@ -26,8 +108,6 @@ function runGame() {
     }
 }
 
-//inner loop starts with outer loop value
-
 function initialRoll(numPlayers) {
     for (var q = 0; q < numPlayers; q++) {
         players[q][1] = roll();
@@ -35,8 +115,8 @@ function initialRoll(numPlayers) {
 }
 
 function checkForDuplicates(numPlayers) {
-    var swapped = false;
-    while (!swapped) {
+    var swapped = true;
+    while (swapped) {
         swapped = false;
         for (var q = 0; q < numPlayers; q++) {
             for (var p = q + 1; p < numPlayers; p++) {
