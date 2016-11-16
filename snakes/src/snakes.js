@@ -6,13 +6,23 @@
 var players = [];
 var player;
 var directory = {};
-var snakes = [[24,2]];
-var ladders = [[2,12]];
+var snakes = [
+    // [34, 2],
+    // [19, 5],
+    // [77, 52]
+    [88, 49]
+];
+var ladders = [
+    // [2,12]
+];
+var width = 10;
+var height = 10;
+var body, board, cellWidth, cellHeight;
 
 function createBoard() {
     //Create board
-    var body = document.getElementsByTagName("body")[0];
-    var board = document.createElement("table");
+    body = document.getElementsByTagName("body")[0];
+    board = document.createElement("table");
     var row;
     var cell;
 
@@ -28,49 +38,75 @@ function createBoard() {
         }
     }
 
-    var width = cell.offsetWidth;
-    var height = cell.offsetHeight;
+    cellHeight = board.offsetHeight / height;
+    cellWidth = board.offsetWidth / width;
 
-    //Create ladders
+    var start, end, triangleWidth, triangleHeight,
+        triangleHypotenuse, snake, ladder, imageHeight,
+        startFromTop, endFromTop, startFromLeft, endFromLeft;
 
     for (var s = 0; s < snakes.length; s++) {
-        var start = snakes[s][0];
-        var end = snakes[s][1];
+        drawEntity(snakes[s][0], snakes[s][1], "snake4.png");
+    }
 
-        var triangleWidth = (end - start) % 10;
-        var triangleHeight = Math.floor((end - start)/10);
-        var triangleHypotenuse = Math.sqrt(
-            Math.pow(triangleWidth, 2) +
-            Math.pow(triangleHeight, 2)
-        );
-
-        var holder = document.createElement("div");
-        var circle1 = document.createElement("div");
-        var circle2 = document.createElement("div");
-
-        board.appendChild(holder);
-        holder.appendChild(circle1);
-        holder.appendChild(circle2);
-
-        holder.className = "holder";
-        circle1.className = "circle";
-        circle2.className = "circle circle2";
-
-        holder.style.transform = `rotate(${
-            90 - toDegrees(Math.asin(triangleWidth / triangleHypotenuse))
-        }deg)`;
-        holder.style.width = `${triangleHypotenuse * width}px`;
-        console.log();
-        holder.style.top = `${(10 - Math.floor(end / 10)) * width}px`;
+    for (var l = 0; l < ladders.length; l++) {
+        drawEntity(ladders[l][1], ladders[l][0], "ladder.png");
     }
 }
 
-function toDegrees (angle) {
-  return angle * (180 / Math.PI);
+function drawEntity(start, end, image) {
+    if ((start % 10) > (end % 10)) {
+        triangleWidth = Math.round((start - end) % width) * cellWidth;
+    } else {
+        triangleWidth = Math.round((end - start) % width) * cellWidth;
+    }
+
+    if ((start / height) > (end / height)) {
+        triangleHeight = Math.round((end - start) / height) * cellHeight;
+    } else {
+        triangleHeight = Math.round((start - end) / height) * cellHeight;
+    }
+
+    triangleHypotenuse = Math.sqrt(
+        Math.pow(triangleWidth, 2) +
+        Math.pow(triangleHeight, 2)
+    );
+
+    entity = document.createElement("img");
+    body.appendChild(entity);
+
+    entity.src = image;
+    entity.style.height = `${triangleHypotenuse}px`;
+
+    console.log(start, end, cellWidth, triangleHypotenuse);
+
+    imageHeight = entity.offsetHeight;
+
+    startFromTop = round(((height - Math.round(start / height)) * cellHeight) -
+        (imageHeight - triangleHeight), cellHeight);
+    endFromTop = round(((height - Math.round(end / height)) * cellHeight) -
+        (imageHeight - triangleHeight), cellHeight);
+
+    startFromLeft = round(((start % width) * cellWidth) - (cellWidth / 2), cellWidth / 2);
+    endFromLeft = round(((end % width) * cellWidth) - (cellWidth / 2), cellWidth / 2);
+
+    if (start > end) {
+        entity.style.top = `${startFromTop}px`;
+    } else {
+        entity.style.top = `${endFromTop}px`;
+    }
+
+    if (start % width > end % width) {
+        entity.style.transform = `rotate(${Math.acos(triangleHeight / triangleHypotenuse)}rad)`;
+        entity.style.left = `${endFromLeft}px`;
+    } else {
+        entity.style.transform = `rotate(${(Math.PI * 2) - Math.acos(triangleWidth / triangleHypotenuse)}rad)`;
+        entity.style.left = `${startFromLeft}px`;
+    }
 }
 
-function toRadians (angle) {
-  return angle * (Math.PI / 180);
+function round(value, to) {
+    return Math.round(value/to) * to;
 }
 
 function initialise(numPlayers, numComputers) {
