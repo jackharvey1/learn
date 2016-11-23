@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <script src="hanoi.js"></script>
+    <link rel="stylesheet" type="text/css" href="hanoi.css" />
+</head>
+
+<body onload="instantiateHTML()">
+    <div class="container">
+        <div>
+            <canvas id="left" width="150px" height="120px"></canvas>
+            <canvas id="middle" width="150px" height="120px"></canvas>
+            <canvas id="right" width="150px" height="120px"></canvas>
+        </div>
+        <div class="input">
+            <input type="number" id="count" size="2" value="3"></input>
+            <input type="number" step="100" size="4" id="interval" value="500"></input>
+            <input type="button" onclick="runHTML(
+                Math.round(document.getElementById('count').value),
+                Math.round(document.getElementById('interval').value)
+            )" value="Go"></input>
+        </div>
+    </div>
+</body>
+
+</html>
