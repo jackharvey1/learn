@@ -5,14 +5,22 @@
 
 var hanoi;
 var moves = [];
-var left, middle, right, discs, interval;
+var left, middle, right, moves, time;
+var discs, interval;
 var colours = {};
 
 function runHTML(d, i) {
     interval = i;
     discs = d;
+
     instantiate(discs, 3);
+
+    var start = performance.now();
     move(discs, hanoi.a, hanoi.c, hanoi.b);
+    var end = performance.now();
+
+    document.getElementById('time').textContent =
+        `Time to solve: ${((end - start) / 1000).round(4)} seconds`;
     iterateAndAnimate(0);
 }
 
@@ -32,10 +40,16 @@ function iterateAndAnimate(n) {
         drawPegs();
         drawDiscs();
 
+        setMovesText(n);
+
         if (n < hanoiStates.length - 1) {
             iterateAndAnimate(n+1);
         }
     }, interval);
+}
+
+function setMovesText(n) {
+    document.getElementById('moves').textContent = `Moves: ${n} / ${hanoiStates.length - 1}`;
 }
 
 function move(n, from, to, not) {
@@ -149,4 +163,8 @@ Object.prototype.clone = function() {
         }
     }
     return clone;
+};
+
+Number.prototype.round = function(decimalPlaces) {
+    return Number((this).toFixed(decimalPlaces));
 };

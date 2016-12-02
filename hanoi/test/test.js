@@ -4,40 +4,6 @@
 })();
 
 describe('Towers of hanoi', function () {
-    var returnedStates = [{
-        a: [ 3, 2, 1 ],
-        b: [  ],
-        c: [  ]
-    }, {
-        a: [ 3, 2 ],
-        b: [ 1 ],
-        c: [  ]
-    }, {
-        a: [ 3 ],
-        b: [ 2 ],
-        c: [ 1 ]
-    }, {
-        a: [ 3 ],
-        b: [  ],
-        c: [ 2, 1 ]
-    }, {
-        a: [  ],
-        b: [ 2, 1 ],
-        c: [ 3 ]
-    }, {
-        a: [ 2 ],
-        b: [ 1 ],
-        c: [ 3 ]
-    }, {
-        a: [ 1 ],
-        b: [  ],
-        c: [ 3, 2 ]
-    }, {
-        a: [  ],
-        b: [  ],
-        c: [ 3, 2, 1 ]
-    }];
-
     describe('instantiation', function() {
         beforeEach(function() {
             instantiate(3);
@@ -118,7 +84,7 @@ describe('Towers of hanoi', function () {
     describe('solver', function() {
         fit('should generate the correct states', function() {
             instantiate(3);
-            move(hanoi.a.length, 'a', hanoi.a, 'c', hanoi.c, 'b', hanoi.b);
+            move(hanoi.a.length, hanoi.a, hanoi.c, hanoi.b);
             expect(hanoiStates).toEqual([{
                 a: [3, 2, 1],
                 b: [],
@@ -159,7 +125,7 @@ describe('Towers of hanoi', function () {
                 b: [],
                 c: []
             };
-            move(hanoi.a.length, 'a', hanoi.a, 'c', hanoi.c, 'b', hanoi.b);
+            move(hanoi.a.length, hanoi.a, hanoi.c, hanoi.b);
             expect(hanoi).toEqual({
                 a: [],
                 b: [],
@@ -172,7 +138,7 @@ describe('Towers of hanoi', function () {
                 b: [],
                 c: []
             };
-            move(hanoi.a.length, 'a', hanoi.a, 'c', hanoi.c, 'b', hanoi.b);
+            move(hanoi.a.length, hanoi.a, hanoi.c, hanoi.b);
             expect(hanoi).toEqual({
                 a: [],
                 b: [],
@@ -185,7 +151,7 @@ describe('Towers of hanoi', function () {
                 b: [],
                 c: []
             };
-            move(hanoi.a.length, 'a', hanoi.a, 'c', hanoi.c, 'b', hanoi.b);
+            move(hanoi.a.length, hanoi.a, hanoi.c, hanoi.b);
             expect(hanoi).toEqual({
                 a: [],
                 b: [],
