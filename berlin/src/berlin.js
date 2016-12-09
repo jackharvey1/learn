@@ -66,7 +66,7 @@ function singleHours(hours) {
 function fourLights(number, colour) {
     number %= 5;
     var row = "";
-    for (var y = 0; y < number; y++) {
+    for (var r = 0; r < number; r++) {
         row += colour;
     }
     for (var o = 0; o < (4 - number); o++) {
